@@ -53,6 +53,9 @@ namespace DictionariesAdvanced
         {
             Dictionary<double, int> averageGrades = new Dictionary<double, int>();
 
+            //-2.5 4 3 -2.5 -5.5 4 3 3 -2.5 3 
+            // Counts how many times each element is present
+
             string[] input = Console.ReadLine().Trim().Split(" ");
 
             double[] inputNumbers = input.Select(double.Parse).ToArray();
@@ -104,7 +107,7 @@ namespace DictionariesAdvanced
 
             studentGrades = studentGrades.OrderBy(x => x.Value)
                 .ThenBy(x => x.Key)
-                .Reverse()
+                //.Reverse()
                 .ToDictionary(x => x.Key, x => x.Value);
 
             foreach (var (key, value) in studentGrades)
@@ -112,6 +115,61 @@ namespace DictionariesAdvanced
                 Console.WriteLine($"{key} = {value}");
             }
 
+        }
+
+        static public void MultiDictioanryExample()
+        {
+            /*
+             Multi-Dictionary
+            Dictionary containing for ex a List
+
+            {Input}
+            7
+            John 5.20
+            Maria 5.50
+            John 3.20
+            Maria 2.50
+            Sam 2.00
+            Maria 3.46
+            Sam 3.00
+
+            {Output}
+
+            John -> 5.20 3.20 (avg: 4.20)
+            Maria -> 5.50 2.50 3.46 (avg: 3.82)
+            Sam -> 2.00 3.00 (avg: 2.50)
+
+             */
+
+            Dictionary<string, List<decimal>> studentAvgGrades = new Dictionary<string, List<decimal>> { };
+
+            int studentCount = int.Parse(Console.ReadLine());
+
+            for (int i = 0; i < studentCount; i++)
+            {
+                string[] currentInput = Console.ReadLine().Split(" ");
+
+                if (!studentAvgGrades.ContainsKey(currentInput[0]))
+                {
+                    studentAvgGrades.Add(currentInput[0], new List<decimal>());
+                }
+
+                studentAvgGrades[currentInput[0]].Add(decimal.Parse(currentInput[1]));
+            }
+
+            foreach (var (key, value) in studentAvgGrades)
+            {
+                //Console.WriteLine($"{key} -> {string.Join(" ",value)} (avg: {value.Average():F2})");
+
+                Console.Write($"{key} -> ");
+
+                foreach (var item in value)
+                {
+                    Console.Write($"{item:F2} ");
+                }
+
+                Console.WriteLine($"(avg: {value.Average():F2})");
+            }
         }
 
     }
